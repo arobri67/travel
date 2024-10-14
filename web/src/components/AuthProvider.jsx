@@ -1,5 +1,6 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useLayoutEffect,
@@ -24,14 +25,34 @@ const AuthProvider = ({ children }) => {
   const [token, setToken] = useState();
   const [user, setUser] = useState();
 
+  const refreshToken = useCallback(async () => {
+    try {
+      const response = await api.get('/api/v1/auth/refresh');
+      setToken(response.data.accessToken);
+      return response.data.accessToken;
+    } catch (error) {
+      console.error('Error refreshing token:', error);
+      setToken(null);
+      return null;
+    }
+  }, []);
+
   useEffect(() => {
     const fetchMe = async () => {
       try {
         const response = await api.get('/api/v1/auth/me');
         setToken(response.data.accessToken);
         setUser(response.data.user);
-      } catch {
-        setToken(null);
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        const newToken = await refreshToken();
+        if (newToken) {
+          const response = await api.get('/api/v1/auth/me');
+          setToken(response.data.accessToken);
+          setUser(response.data.user);
+        } else {
+          setToken(null);
+        }
       }
     };
 
@@ -52,27 +73,18 @@ const AuthProvider = ({ children }) => {
     };
   }, [token]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const refreshInterceptor = api.interceptors.response.use(
       (response) => response,
       async (error) => {
         const originalRequest = error.config;
 
-        if (
-          error.response.status === 403 &&
-          error.response.data.message === 'Unauthorized'
-        ) {
-          try {
-            const response = await api.get('/api/v1/auth/refresh');
-
-            setToken(response.data.accessToken);
-
-            originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`;
-            originalRequest._retry = true;
-
+        if (error.response.status === 403 && !originalRequest._retry) {
+          originalRequest._retry = true;
+          const newToken = await refreshToken();
+          if (newToken) {
+            originalRequest.headers.Authorization = `Bearer ${newToken}`;
             return api(originalRequest);
-          } catch {
-            setToken(null);
           }
         }
 
@@ -83,10 +95,10 @@ const AuthProvider = ({ children }) => {
     return () => {
       api.interceptors.response.eject(refreshInterceptor);
     };
-  }, []);
+  }, [refreshToken]);
 
   return (
-    <AuthContext.Provider value={{ token, setToken, user }}>
+    <AuthContext.Provider value={{ token, setToken, user, refreshToken }}>
       {children}
     </AuthContext.Provider>
   );
