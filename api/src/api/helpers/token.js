@@ -22,7 +22,7 @@ const generateRefreshToken = async (data) => {
 const generateAccessToken = async (data) => {
     return await new jose.SignJWT({ data })
         .setProtectedHeader({ alg: 'HS256' })
-        .setExpirationTime('1m')
+        .setExpirationTime('15m')
         .sign(jwtSecret);
 };
 

@@ -38,8 +38,8 @@ const login = expressAsyncHandler(async (req, res) => {
     //Create a secure cookie with refresh token with maxage of 1 one week
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: false, // only fore test, true for production
-        sameSite: 'lax', // lax for local development and none for production
+        secure: true, // only fore test, true for production
+        sameSite: 'none', // lax for local development and none for production
         maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
