@@ -21,4 +21,4 @@ const seedInitialData = async () => {
     }
 };
 
-module.exports = seedInitialData;
+module.exports = { seedInitialData };

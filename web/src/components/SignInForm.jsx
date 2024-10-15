@@ -50,7 +50,7 @@ const SignInForm = () => {
           <h2 className='pb-4 text-center text-2xl'>Sign In to Your Account</h2>
           <p className='pb-4 text-center text-muted-foreground'>
             Access exclusive listings and manage your favorite listings. (Demo
-            credential available on the repo of this project)
+            login: demo@travel.com, password: demotravel)
           </p>
           <Separator />
         </CardHeader>

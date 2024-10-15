@@ -11,8 +11,7 @@ const errorHandler = require('./src/middleware/errorHandler');
 const indexRouter = require('./src/api/routes/indexRouter');
 const corsOptions = require('./src/config/corsOptions');
 const connectDB = require('./src/config/db');
-const seedInitialData = require('./src/api/helpers/seedData');
-
+const { seedInitialData } = require('./src/api/helpers/seedData');
 const PORT = process.env.PORT || 3500;
 
 const app = express();
