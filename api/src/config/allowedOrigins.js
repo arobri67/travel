@@ -1,3 +1,3 @@
-const allowedOrigins = ['http://localhost:5173'];
+const allowedOrigins = ['https://travel-tan-xi.vercel.app'];
 
 module.exports = allowedOrigins;
