@@ -2,13 +2,9 @@ import { Separator } from '@/components/ui';
 
 const Footer = () => {
   return (
-    <footer className='container mt-2 h-10'>
+    <footer className='container mt-2 flex h-10 flex-col items-center justify-center'>
       <Separator className='w-full' />
-      <ul className=' flex justify-between p-2 text-sm sm:text-base'>
-        <li>&copy; {new Date().getFullYear()} All rights reserved.</li>
-        <li>Made with ❤️ by Arnaud</li>
-        <li>GitHub Repo</li>
-      </ul>
+      <span className='p-2'>Made with ❤️ by Arnaud</span>
     </footer>
   );
 };
