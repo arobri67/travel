@@ -5,6 +5,7 @@ import {
   useEffect,
   useLayoutEffect,
   useState,
+  useMemo,
 } from 'react';
 
 import api from '@/api';
@@ -46,21 +47,20 @@ const AuthProvider = ({ children }) => {
         setUser(response.data.user);
       } catch (error) {
         console.error('Error fetching user:', error);
-        // If fetching user fails, try to refresh the token
-        const newToken = await refreshToken();
-        if (!newToken) {
-          setToken(null);
-          setUser(null);
-        }
+        setToken(null);
+        setUser(null);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchMe();
-  }, [refreshToken]);
+    if (token) {
+      fetchMe();
+    } else {
+      setIsLoading(false);
+    }
+  }, [token]);
 
-  // Set up interceptors
   useEffect(() => {
     const requestInterceptor = api.interceptors.request.use((config) => {
       if (token) {
@@ -73,7 +73,7 @@ const AuthProvider = ({ children }) => {
       (response) => response,
       async (error) => {
         const originalRequest = error.config;
-        if (error.response.status === 403 && !originalRequest._retry) {
+        if (error.response?.status === 403 && !originalRequest._retry) {
           originalRequest._retry = true;
           const newToken = await refreshToken();
           if (newToken) {
@@ -91,12 +91,19 @@ const AuthProvider = ({ children }) => {
     };
   }, [token, refreshToken]);
 
+  const contextValue = useMemo(
+    () => ({
+      token,
+      setToken,
+      user,
+      refreshToken,
+      isLoading,
+    }),
+    [token, user, refreshToken, isLoading],
+  );
+
   return (
-    <AuthContext.Provider
-      value={{ token, setToken, user, refreshToken, isLoading }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
 
