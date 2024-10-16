@@ -20,7 +20,7 @@ export const useAuth = () => {
 
   return authContext;
 };
-//re
+
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);

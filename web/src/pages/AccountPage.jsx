@@ -8,7 +8,6 @@ import useFetch from '@/hooks/useFetch';
 import { useListingStore } from '@/state/useListingsStore';
 
 const AccountPage = () => {
-  const { user } = useParams();
   const { listings, favoriteListingIds } = useListingStore();
 
   const favoriteListings = useMemo(
@@ -17,13 +16,13 @@ const AccountPage = () => {
     [listings, favoriteListingIds],
   );
 
-  const { data, error, isLoading } = useFetch(`/api/v1/users/${user}`);
+  // const { data, error, isLoading } = useFetch(`/api/v1/users/${user}`);
 
   return (
     <>
       <section className='container mt-[270px] h-full py-4 sm:mt-[170px]'>
-        <DataRenderer error={error} isLoading={isLoading}>
-          <UserProfile data={data} />
+        <DataRenderer>
+          {/* <UserProfile data={data} /> */}
           <ListingList listings={favoriteListings} />
         </DataRenderer>
       </section>
