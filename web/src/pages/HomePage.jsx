@@ -8,8 +8,11 @@ import { useListingStore } from '@/state/useListingsStore';
 const HomePage = () => {
   const { filters } = useFilterStore();
   const { listings, fetchListings, status, error } = useListingStore();
+  console.log('filters', filters);
+  console.log('listings', listings);
 
   const fetchOptions = useMemo(() => ({ params: filters }), [filters]);
+  console.log('fetchOptions', fetchOptions);
 
   useEffect(() => {
     fetchListings(fetchOptions);
@@ -25,3 +28,9 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+// availability
+// :
+// {from: Wed Oct 16 2024 00:00:00 GMT+0200 (Central European Summer Time), to: Wed Oct 23 2024 00:00:00 GMT+0200 (Central European Summer Time)}
+
+// {to: Wed Oct 23 2024 00:00:00 GMT+0200 (Central European Summer Time), from: Wed Oct 16 2024 00:00:00 GMT+0200 (Central European Summer Time), guests: 0, search: ''}

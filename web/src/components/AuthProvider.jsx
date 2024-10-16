@@ -135,8 +135,10 @@ const AuthProvider = ({ children }) => {
         const response = await api.get('/api/v1/auth/me');
 
         setToken(response.data.accessToken);
+        setUser(response.data.user);
       } catch {
         setToken(null);
+        setUser(null);
       }
     };
 

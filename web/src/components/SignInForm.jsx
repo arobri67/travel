@@ -33,9 +33,7 @@ const SignInForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      console.log('Sending login request...');
       const response = await api.post('/api/v1/auth', data);
-      console.log('Login response:', response);
       setToken(response.data.accessToken);
       setUser(response.data.userId);
     } catch (e) {
@@ -53,8 +51,10 @@ const SignInForm = () => {
         <CardHeader>
           <h2 className='pb-4 text-center text-2xl'>Sign In to Your Account</h2>
           <p className='pb-4 text-center text-muted-foreground'>
-            Access exclusive listings and manage your favorite listings. (Demo
-            login: demo@travel.com, password: demotravel)
+            Access exclusive listings and manage your favorite listings.
+            <span className='font-bold text-muted-foreground'>
+              (Demo login: demo@travel.com, password: demotravel)
+            </span>
           </p>
           <Separator />
         </CardHeader>

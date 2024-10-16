@@ -1,4 +1,3 @@
-import { startOfDay, addDays } from 'date-fns';
 import { create } from 'zustand';
 
 import api from '@/api';
@@ -12,19 +11,19 @@ export const useListingStore = create((set, get) => ({
     set({ status: 'loading', error: null });
     try {
       // Fetch listings
-      const startOfToday = startOfDay(new Date());
+
       const response = await api.get('/api/v1/listings', options);
 
-      const transformedListings = response.data.map((listing) => {
-        return {
-          ...listing,
-          availability: {
-            from: startOfToday,
-            to: addDays(startOfToday, listing.addto),
-          },
-        };
-      });
-      set({ listings: transformedListings, status: 'succeeded' });
+      // const transformedListings = response.data.map((listing) => {
+      //   return {
+      //     ...listing,
+      //     availability: {
+      //       from: startOfToday,
+      //       to: addDays(startOfToday, listing.addto),
+      //     },
+      //   };
+      // });
+      set({ listings: response.data, status: 'succeeded' });
       // Fetch favorite listings for a user
       const favoriteResponse = await api.get('/api/v1/users/favorites');
       set({ favoriteListingIds: favoriteResponse.data });
