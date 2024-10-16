@@ -46,33 +46,35 @@ const AuthProvider = ({ children }) => {
         setUser(response.data.user);
       } catch (error) {
         console.error('Error fetching user:', error);
-        // If fetching user fails, try to refresh the token
-        const newToken = await refreshToken();
-        if (!newToken) {
-          setToken(null);
-          setUser(null);
-        }
+        setToken(null);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchMe();
-  }, [refreshToken]);
+  }, []);
 
-  // Set up interceptors
-  useEffect(() => {
-    const requestInterceptor = api.interceptors.request.use((config) => {
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+  useLayoutEffect(() => {
+    const authInterceptor = api.interceptors.request.use((config) => {
+      config.headers.Authorization =
+        !config._retry && token
+          ? `Bearer ${token}`
+          : config.headers.Authorization;
       return config;
     });
 
-    const responseInterceptor = api.interceptors.response.use(
+    return () => {
+      api.interceptors.request.eject(authInterceptor);
+    };
+  }, [token]);
+
+  useEffect(() => {
+    const refreshInterceptor = api.interceptors.response.use(
       (response) => response,
       async (error) => {
         const originalRequest = error.config;
+
         if (error.response.status === 403 && !originalRequest._retry) {
           originalRequest._retry = true;
           const newToken = await refreshToken();
@@ -81,15 +83,15 @@ const AuthProvider = ({ children }) => {
             return api(originalRequest);
           }
         }
+
         return Promise.reject(error);
       },
     );
 
     return () => {
-      api.interceptors.request.eject(requestInterceptor);
-      api.interceptors.response.eject(responseInterceptor);
+      api.interceptors.response.eject(refreshInterceptor);
     };
-  }, [token, refreshToken]);
+  }, [refreshToken]);
 
   return (
     <AuthContext.Provider
