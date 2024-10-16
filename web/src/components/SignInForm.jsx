@@ -33,11 +33,14 @@ const SignInForm = () => {
 
   const onSubmit = async (data) => {
     try {
+      console.log('Sending login request...');
       const response = await api.post('/api/v1/auth', data);
+      console.log('Login response:', response);
       setToken(response.data.accessToken);
     } catch (e) {
+      console.error('Login error:', e);
       setError('root', {
-        message: e.response.data.message,
+        message: e.response?.data?.message || 'An error occurred',
       });
     }
   };

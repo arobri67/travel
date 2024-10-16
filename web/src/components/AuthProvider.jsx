@@ -127,12 +127,15 @@ export const useAuth = () => {
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState();
+  const [user, setUser] = useState();
 
   useEffect(() => {
     const fetchMe = async () => {
       try {
-        const response = await api.get('/api/me');
+        const response = await api.get('/api/v1/auth/me');
+        console.log('me res', response.data);
         setToken(response.data.accessToken);
+        setUser(response.data.user);
       } catch {
         setToken(null);
       }
@@ -166,7 +169,7 @@ const AuthProvider = ({ children }) => {
           error.response.data.message === 'Unauthorized'
         ) {
           try {
-            const response = await api.get('/api/refreshToken');
+            const response = await api.get('/api/v1/auth/refresh');
 
             setToken(response.data.accessToken);
 
@@ -189,7 +192,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ token, setToken }}>
+    <AuthContext.Provider value={{ token, setToken, user }}>
       {children}
     </AuthContext.Provider>
   );
