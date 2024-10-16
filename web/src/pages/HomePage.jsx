@@ -8,11 +8,8 @@ import { useListingStore } from '@/state/useListingsStore';
 const HomePage = () => {
   const { filters } = useFilterStore();
   const { listings, fetchListings, status, error } = useListingStore();
-  console.log('filters', filters);
-  console.log('listings', listings);
 
   const fetchOptions = useMemo(() => ({ params: filters }), [filters]);
-  console.log('fetchOptions', fetchOptions);
 
   useEffect(() => {
     fetchListings(fetchOptions);
