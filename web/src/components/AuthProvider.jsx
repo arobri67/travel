@@ -39,8 +39,10 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchMe = async () => {
+      console.log('Fetching user data');
       try {
         const response = await api.get('/api/v1/auth/me');
+        console.log('User data response:', response.data);
         setToken(response.data.accessToken);
         setUser(response.data.user);
       } catch (error) {
