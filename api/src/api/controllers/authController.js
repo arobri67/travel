@@ -118,8 +118,8 @@ const logout = (req, res) => {
     if (!cookie?.refreshToken) return res.sendStatus(204); // no content
     res.clearCookie('refreshToken', {
         httpOnly: true,
-        secure: false, // only fore test, true for production
-        sameSite: 'lax', // lax for local development and none for production
+        secure: true, // only fore test, true for production
+        sameSite: 'none', // lax for local development and none for production
     });
     res.json({ message: 'Cookie cleared' });
 };
