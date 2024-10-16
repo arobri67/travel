@@ -22,8 +22,9 @@ export const useAuth = () => {
 };
 
 const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState();
-  const [user, setUser] = useState();
+  const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const refreshToken = useCallback(async () => {
     try {
@@ -39,22 +40,15 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchMe = async () => {
-      console.log('Fetching user data');
       try {
         const response = await api.get('/api/v1/auth/me');
-        console.log('User data response:', response.data);
         setToken(response.data.accessToken);
         setUser(response.data.user);
       } catch (error) {
         console.error('Error fetching user:', error);
-        const newToken = await refreshToken();
-        if (newToken) {
-          const response = await api.get('/api/v1/auth/me');
-          setToken(response.data.accessToken);
-          setUser(response.data.user);
-        } else {
-          setToken(null);
-        }
+        setToken(null);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -100,7 +94,9 @@ const AuthProvider = ({ children }) => {
   }, [refreshToken]);
 
   return (
-    <AuthContext.Provider value={{ token, setToken, user, refreshToken }}>
+    <AuthContext.Provider
+      value={{ token, setToken, user, refreshToken, isLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

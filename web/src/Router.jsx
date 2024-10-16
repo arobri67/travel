@@ -16,18 +16,22 @@ const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
     children: [
       {
-        path: '/signin',
+        index: true,
         element: (
-          <Route>
-            <SignInPage />
+          <Route isProtected>
+            <HomePage />
           </Route>
         ),
       },
       {
-        path: '/',
+        path: '/signin',
+        element: <SignInPage />,
+      },
+      {
+        path: '/account/:user',
         element: (
           <Route isProtected>
-            <HomePage />
+            <AccountPage />
           </Route>
         ),
       },
@@ -36,14 +40,6 @@ const router = createBrowserRouter([
         element: (
           <Route isProtected>
             <ListingDetailsPage />
-          </Route>
-        ),
-      },
-      {
-        path: '/account/:user',
-        element: (
-          <Route isProtected>
-            <AccountPage />
           </Route>
         ),
       },
