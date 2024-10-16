@@ -47,8 +47,11 @@ const login = expressAsyncHandler(async (req, res) => {
 
     const accessToken = await generateAccessToken(refreshToken);
 
-    //Send access token
-    res.json({ accessToken });
+    // Send access token and user ID
+    res.json({
+        accessToken,
+        userId: foundUser._id,
+    });
 });
 
 //@desc refresh

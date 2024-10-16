@@ -133,9 +133,8 @@ const AuthProvider = ({ children }) => {
     const fetchMe = async () => {
       try {
         const response = await api.get('/api/v1/auth/me');
-        console.log('me res', response.data);
+
         setToken(response.data.accessToken);
-        setUser(response.data.user);
       } catch {
         setToken(null);
       }
@@ -192,7 +191,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ token, setToken, user }}>
+    <AuthContext.Provider value={{ token, setToken, user, setUser }}>
       {children}
     </AuthContext.Provider>
   );

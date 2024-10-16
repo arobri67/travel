@@ -20,7 +20,7 @@ const signInFormSchema = z.object({
 });
 
 const SignInForm = () => {
-  const { setToken } = useAuth();
+  const { setToken, setUser } = useAuth();
 
   const {
     formState: { errors, isSubmitting },
@@ -37,6 +37,7 @@ const SignInForm = () => {
       const response = await api.post('/api/v1/auth', data);
       console.log('Login response:', response);
       setToken(response.data.accessToken);
+      setUser(response.data.userId);
     } catch (e) {
       console.error('Login error:', e);
       setError('root', {
