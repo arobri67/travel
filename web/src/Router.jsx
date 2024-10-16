@@ -40,7 +40,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: '/account',
+        path: '/account/:user',
         element: (
           <Route isProtected>
             <AccountPage />

@@ -16,7 +16,7 @@ import {
 
 const NavBar = () => {
   const { setToken, user } = useAuth();
-
+  console.log(user);
   const handleSignOut = async () => {
     try {
       await api.post('/api/v1/auth/logout');
