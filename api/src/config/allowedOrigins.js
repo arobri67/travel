@@ -5,7 +5,7 @@ const allowedOrigins = [
     env.ALLOWED_ORIGINS2,
     env.ALLOWED_ORIGINS3,
     env.ALLOWED_ORIGINS4,
-    env.ALLOWED_ORIGINS5,
+    'http://localhost:5173',
 ];
 
 module.exports = allowedOrigins;
