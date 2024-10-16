@@ -13,6 +13,10 @@ const ListingsFilter = () => {
   const [guests, setGuests] = useState(0);
   const [search, setSearch] = useState('');
 
+  // Define min and max dates
+  const minDate = new Date('2024-10-17');
+  const maxDate = new Date('2024-11-30');
+
   const handleFilters = () => {
     setFilters({
       to: dates?.to,
@@ -58,8 +62,9 @@ const ListingsFilter = () => {
             buttonClassName='border border-none rounded-full hover:bg-muted hover:text-primary px-2 w-full sm:w-[270px] sm:text-lg'
             value={dates}
             onChange={setDates}
-            minDate={new Date()}
-            placeholder='When?'
+            minDate={minDate}
+            maxDate={maxDate}
+            placeholder={`When? min ${minDate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' })} - max ${maxDate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' })}`}
           />
         </div>
       </div>

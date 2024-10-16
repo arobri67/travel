@@ -66,7 +66,7 @@ const NavBar = () => {
           </div>
         </div>
 
-        <div className='container flex flex-col justify-between gap-2 p-2 shadow-lg sm:w-full sm:flex-row sm:rounded-full sm:border sm:border-border md:max-w-3xl'>
+        <div className='container flex flex-col justify-between gap-2 p-2 shadow-lg sm:w-full sm:flex-row sm:rounded-full sm:border sm:border-border md:max-w-4xl'>
           <ListingsFilter />
         </div>
         <Separator className='container' />
