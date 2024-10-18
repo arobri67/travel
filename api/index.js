@@ -6,7 +6,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 const errorHandler = require('./src/middleware/errorHandler');
-// const { logger, logEvents } = require('./src/middleware/logger');
+const { logger } = require('./src/middleware/logger');
 
 const indexRouter = require('./src/api/routes/indexRouter');
 const corsOptions = require('./src/config/corsOptions');
@@ -16,7 +16,16 @@ const PORT = process.env.PORT || 3500;
 
 const app = express();
 
-// app.use(logger);
+app.use(logger);
+
+// Handle OPTIONS requests for CORS/traefik
+app.use((req, res, next) => {
+    if (req.method === 'OPTIONS') {
+        res.sendStatus(200);
+    } else {
+        next();
+    }
+});
 
 app.use(cors(corsOptions));
 
@@ -54,8 +63,4 @@ mongoose.connection.once('open', () => {
 
 mongoose.connection.on('error', (err) => {
     console.log(err);
-    // logEvents(
-    //     `${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`,
-    //     'mongoErrLog.log'
-    // );
 });
