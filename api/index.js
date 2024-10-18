@@ -30,7 +30,7 @@ seedInitialData();
 
 app.use('/api/v1/', indexRouter);
 
-app.use('/', (res) => {
+app.use('/', (req, res) => {
     res.send('travel-api is up and running!');
 });
 
