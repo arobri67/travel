@@ -31,7 +31,7 @@ seedInitialData();
 app.use('/api/v1/', indexRouter);
 
 app.use('/', (res) => {
-    res.json({ message: 'travel-api is up and running!' });
+    res.send('travel-api is up and running!');
 });
 
 app.all('*', (req, res) => {
