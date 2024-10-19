@@ -18,15 +18,6 @@ const app = express();
 
 app.use(logger);
 
-// Handle OPTIONS requests for CORS/traefik
-app.use((req, res, next) => {
-    if (req.method === 'OPTIONS') {
-        res.sendStatus(200);
-    } else {
-        next();
-    }
-});
-
 app.use(cors(corsOptions));
 
 app.use(express.json());
